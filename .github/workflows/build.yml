@@ -29,7 +29,7 @@ jobs:
 
       - name: Generate
         working-directory: ${{github.workspace}}\proj
-        run: cmake . -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_VERSION="v${{ steps.tags.outputs.new_version }}"
+        run: cmake ../ -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_VERSION="v${{ steps.tags.outputs.new_version }}"
 
       - name: Build
         working-directory: ${{github.workspace}}\proj
