@@ -1,5 +1,4 @@
 add_subdirectory(json)
-add_subdirectory(glfw)
 add_subdirectory(zydis)
 add_subdirectory(safetyhook)
 

@@ -34,7 +34,6 @@ target_link_libraries(
   PRIVATE stable-diffusion
           Zydis
           safetyhook
-          glfw
           nlohmann_json
           imgui
           imgui-filebrowser)
