@@ -1,0 +1,18 @@
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "vendor/imgui-filebrowser"]
+	path = vendor/imgui-filebrowser
+	url = https://github.com/AirGuanZ/imgui-filebrowser
+[submodule "vendor/json"]
+	path = vendor/json
+	url = https://github.com/nlohmann/json
+[submodule "vendor/zydis"]
+	path = vendor/zydis
+	url = https://github.com/zyantific/zydis
+[submodule "vendor/safetyhook"]
+	path = vendor/safetyhook
+	url = https://github.com/cursey/safetyhook
+[submodule "vendor/stable-diffusion.cpp"]
+	path = vendor/stable-diffusion.cpp
+	url = https://github.com/leejet/stable-diffusion.cpp
