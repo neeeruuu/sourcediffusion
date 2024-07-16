@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create project",
+            "type": "shell",
+            "group": { "kind": "build", "isDefault": true },
+            "windows": { "command": "${workspaceRoot}\\mkproj.bat" },
+        }
+    ],
+}
