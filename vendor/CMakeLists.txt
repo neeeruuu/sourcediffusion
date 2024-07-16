@@ -16,7 +16,6 @@ add_library(imgui STATIC
     imgui/backends/imgui_impl_dx9.cpp
     imgui/backends/imgui_impl_win32.cpp
     imgui/backends/imgui_impl_win32.h)
-target_link_libraries(imgui PRIVATE glfw)
 target_include_directories(imgui SYSTEM PUBLIC imgui)
 
 # ---------------------------
