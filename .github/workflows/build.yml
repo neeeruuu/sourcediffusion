@@ -37,7 +37,7 @@ jobs:
 
       - name: Compress
         working-directory: ${{github.workspace}}\proj\MinSizeRel
-        run: 7z a source-diffusion.zip "Source Diffusion.exe" source-diffusion.dll
+        run: 7z a source-diffusion.zip "Source diffusion.exe" source-diffusion.dll
 
       - name: Release
         uses: softprops/action-gh-release@v1
