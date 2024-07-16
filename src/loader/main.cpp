@@ -30,7 +30,7 @@
 
 #define GAME_NAME "GarrysMod"
 #define EXE_NAME "bin/win64/gmod.exe"
-#define DLL_NAME "source-sd.dll"
+#define DLL_NAME "source-diffusion.dll"
 #define APP_ID "4000"
 
 int reportError(const char* err)
