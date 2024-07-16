@@ -35,6 +35,10 @@ jobs:
         working-directory: ${{github.workspace}}\proj
         run: cmake --build . --config MinSizeRel
 
+      - name: Compress
+        working-directory: ${{github.workspace}}\proj\MinSizeRel
+        run: 7z a source-diffusion.zip "Source Diffusion.exe" source-diffusion.dll
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -43,5 +47,4 @@ jobs:
           name: "v${{ steps.tags.outputs.new_version }}"
           fail_on_unmatched_files: true
           files: |
-            proj/MinSizeRel/Source Diffusion.exe
-            proj/MinSizeRel/source-diffusion.dll
+            proj/MinSizeRel/source-diffusion.zip
