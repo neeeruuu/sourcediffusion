@@ -44,4 +44,4 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             proj/MinSizeRel/Source Diffusion.exe
-            proj/MinSizeRel/source-diffusion.exe
+            proj/MinSizeRel/source-diffusion.dll
