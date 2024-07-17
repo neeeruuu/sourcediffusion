@@ -21,8 +21,9 @@ SafetyHookInline rvHook{};
 class CViewRender;
 void hCViewRender__RenderView(CViewRender* thisptr, CViewSetup& setup, int clearFlags, int whatToDraw)
 {
-    g_PreRenderViewCallback->run(viewRender);
-    rvHook.call(thisptr, viewRender, clearFlags, whatToDraw);
+    auto callOriginal = [&thisptr](CViewSetup& setup, int clearFlags, int whatToDraw) {
+        rvHook.call(thisptr, setup, clearFlags, whatToDraw);
+    };
     g_PreRenderViewCallback->run(thisptr, setup, callOriginal);
     rvHook.call(thisptr, setup, clearFlags, whatToDraw);
 }
