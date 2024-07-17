@@ -27,7 +27,8 @@ file(GLOB_RECURSE SHARED_SOURCES CONFIGURE_DEPENDS "src/shared/*.cpp"
 # dll
 # ---------------------
 file(GLOB_RECURSE DLL_SOURCES CONFIGURE_DEPENDS "src/dll/*.cpp" "src/dll/*.h")
-add_library(source-diffusion SHARED ${DLL_SOURCES} ${SHARED_SOURCES})
+add_library(source-diffusion SHARED ${DLL_SOURCES} ${SHARED_SOURCES}
+                                    res/resources.rc)
 target_compile_definitions(source-diffusion PRIVATE ADDS _AMD64_
                                                     WIN32_LEAN_AND_MEAN)
 target_link_libraries(

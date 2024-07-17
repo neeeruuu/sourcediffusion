@@ -19,6 +19,8 @@
 
 #include <imgui.h>
 
+#include <imgui_notify.h>
+
 /*
     to-do:
         fix naming
@@ -66,9 +68,11 @@ bool regenContext()
                      "", "", false, false, false, -1, static_cast<sd_type_t>(genConfig.type),
                      static_cast<rng_type_t>(genConfig.rng), static_cast<schedule_t>(genConfig.schedule), false, false,
                      false);
-
     if (!ctx)
     {
+        ImGuiToast toast(ImGuiToastType_Error, 3000);
+        toast.set_title("Failed to load model");
+        toast.set_content("new_sd_ctx returned nullptr");
         Log::error("new_sd_ctx failed");
         return false;
     }
