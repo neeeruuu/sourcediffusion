@@ -17,10 +17,10 @@
 * An NVIDIA GPU (for now)
 * A Source game (Garry's Mod only for now)
 
-## Installation 
+<!-- ## Installation 
 1. Grab the latest release from this repo.
 2. Extract it.
-3. Run Source Diffusion.exe
+3. Run Source Diffusion.exe -->
 
 ## Known issues
 * taesd makes results blurry and incoherent
@@ -32,6 +32,7 @@
 * [Realities Edge XL](https://civitai.com/models/129666?modelVersionId=356472)
 
 ## To-Do:
+* [ ] Fix CUDA not being used on GitHub's build
 * [ ] Verify resolution, don't generate while typing in res
 * [ ] Add way to interrupt load / generation 
 * [ ] Fix HUD size being affected when changing CViewSetup size
