@@ -27,7 +27,6 @@
 
 /*
     to-do:
-        fix naming
         implement way to abort generation and mdl load (check if sd / ggml even allows that)
 */
 
@@ -40,13 +39,8 @@ sd_image_t* img;
 std::thread* generationThread = nullptr;
 std::thread* loadThread = nullptr;
 
-IDirect3DSurface9* rtCopy = nullptr;
-IDirect3DTexture9* generatedTexture = nullptr;
-
-ITexture* targetRT;
-IDirect3DTexture9* targetRTD3D;
-
-bool isRenderingCopyView = false;
+IDirect3DTexture9* viewRT;
+IDirect3DTexture9* generatedTexture;
 
 bool regenContext()
 {
@@ -98,11 +92,13 @@ bool regenContext()
 
 void generate()
 {
+    if (!viewRT)
+        return;
 
     HRESULT res;
 
-    IDirect3DSurface9* rt;
-    res = targetRTD3D->GetSurfaceLevel(0, &rt);
+    IDirect3DSurface9* rtSurface;
+    res = viewRT->GetSurfaceLevel(0, &rtSurface);
     if (FAILED(res))
     {
         Log::error("failed to get rt surface ({:#010x})", static_cast<unsigned int>(res));
@@ -110,7 +106,7 @@ void generate()
     }
 
     D3DSURFACE_DESC rtDesc;
-    res = rt->GetDesc(&rtDesc);
+    res = rtSurface->GetDesc(&rtDesc);
     if (FAILED(res))
     {
         Log::error("failed to get rt desc ({:#010x})", static_cast<unsigned int>(res));
@@ -138,10 +134,10 @@ void generate()
         height = genConfig.height;
     }
 
+    IDirect3DSurface9* rtCopy = nullptr;
     if (!rtCopy)
     {
-        res = g_D3DDev->CreateRenderTarget(width, height, rtDesc.Format, D3DMULTISAMPLE_NONE, 0, true,
-                                           &rtCopy, 0);
+        res = g_D3DDev->CreateRenderTarget(width, height, rtDesc.Format, D3DMULTISAMPLE_NONE, 0, true, &rtCopy, 0);
         if (FAILED(res))
         {
             Log::error("faild to create rt copy ({:#010x})", static_cast<unsigned int>(res));
@@ -156,7 +152,7 @@ void generate()
     D3DLOCKED_RECT lockedRect;
     RECT rect{0, 0, width, height};
 
-    res = g_D3DDev->StretchRect(rt, nullptr, rtCopy, &rect, D3DTEXF_NONE);
+    res = g_D3DDev->StretchRect(rtSurface, nullptr, rtCopy, &rect, D3DTEXF_NONE);
     if (FAILED(res))
     {
         Log::error("failed to copy rt ({:#010x})", static_cast<unsigned int>(res));
@@ -405,102 +401,91 @@ void generator::saveConfig()
 /*
     callbacks
 */
-void onPreRenderView(CViewRender* viewRender, CViewSetup& viewSetup,
-                     std::function<void(CViewSetup&, int, int)> renderView)
-{
-    if (!genConfig.enabled)
-        return;
-
-    auto viewRenderInterface = reinterpret_cast<IViewRender*>(viewRender);
-
-    /*
-        vtable functions
-    */
-    static uintptr_t* matSysVTable = *reinterpret_cast<uintptr_t**>(g_MatSys);
-    static auto getRenderCtx = reinterpret_cast<IMatRenderContext* (*)(IMaterialSystem*)>(matSysVTable[102]);
-    static auto beginRTAllocation = reinterpret_cast<void (*)(IMaterialSystem*)>(matSysVTable[86]);
-    static auto endRTAllocation = reinterpret_cast<void (*)(IMaterialSystem*)>(matSysVTable[87]);
-    static auto CreateNamedRenderTargetTextureEx2 =
-        reinterpret_cast<ITexture* (*)(IMaterialSystem*, const char*, int, int, RenderTargetSizeMode_t, ImageFormat,
-                                       MaterialRenderTargetDepth_t, unsigned int, unsigned int)>(matSysVTable[91]);
-
-    static IMatRenderContext* renderContext;
-    if (!renderContext)
-        renderContext = getRenderCtx(g_MatSys);
-
-    if (!targetRT)
-    {
-        beginRTAllocation(g_MatSys);
-        targetRT = CreateNamedRenderTargetTextureEx2(g_MatSys, "_rt_sd", 1, 1, RT_SIZE_FULL_FRAME_BUFFER,
-                                                     IMAGE_FORMAT_RGBA8888, MATERIAL_RT_DEPTH_SHARED,
-                                                     TEXTUREFLAGS_CLAMPS | TEXTUREFLAGS_CLAMPT, 0x00000001);
-        endRTAllocation(g_MatSys);
-
-        void** rtHandles = *reinterpret_cast<void***>(reinterpret_cast<uintptr_t>(targetRT) + 0x48);
-        targetRTD3D = *reinterpret_cast<IDirect3DTexture9**>(reinterpret_cast<uintptr_t>(rtHandles[0]) + 0x58);
-
-        Log::verbose("created source rendertarget");
-    }
-
-    renderContext->SetIntRenderingParameter(INT_RENDERPARM_WRITE_DEPTH_TO_DESTALPHA, 0);
-    renderContext->PushRenderTargetAndViewport();
-    renderContext->SetRenderTarget(targetRT);
-    renderContext->ClearBuffers(true, true, true);
-
-    isRenderingCopyView = true;
-    renderView(viewSetup, VIEW_CLEAR_COLOR | VIEW_CLEAR_DEPTH | VIEW_CLEAR_STENCIL, RENDERVIEW_DRAWVIEWMODEL);
-    isRenderingCopyView = false;
-
-    renderContext->PopRenderTargetAndViewport();
-    renderContext->SetIntRenderingParameter(INT_RENDERPARM_WRITE_DEPTH_TO_DESTALPHA, 1);
-
-    generate();
-}
-auto rvListener = g_PreRenderViewCallback->addListener(onPreRenderView);
-
 void onEnginePostProcessing()
 {
-    if (isRenderingCopyView)
+    HRESULT res;
+    IDirect3DSurface9* rtSfc;
+    res = g_D3DDev->GetRenderTarget(0, &rtSfc);
+    if (FAILED(res))
         return;
+
+    D3DSURFACE_DESC rtDesc{};
+    res = rtSfc->GetDesc(&rtDesc);
+    if (FAILED(res))
+        return;
+
+    if (!viewRT)
+    {
+        res = g_D3DDev->CreateTexture(rtDesc.Width, rtDesc.Height, 1, D3DUSAGE_RENDERTARGET, rtDesc.Format,
+                                      D3DPOOL_DEFAULT, &viewRT, 0);
+        if (FAILED(res))
+        {
+            rtSfc->Release();
+            return;
+        }
+    }
+
+    IDirect3DSurface9* viewSfc;
+    res = viewRT->GetSurfaceLevel(0, &viewSfc);
+    if (FAILED(res))
+    {
+        rtSfc->Release();
+        return;
+    }
+
+    res = g_D3DDev->StretchRect(rtSfc, 0, viewSfc, 0, D3DTEXF_NONE);
+    if (FAILED(res))
+    {
+        viewSfc->Release();
+        rtSfc->Release();
+        return;
+    }
+
+    viewSfc->Release();
+    rtSfc->Release();
 
     if (!genConfig.enabled)
         return;
+
+    if (viewRT)
+        generate();
 
     auto genTex = getGeneratedTexture();
     if (genTex)
     {
-        IDirect3DSurface9* rt;
-        g_D3DDev->GetRenderTarget(0, &rt);
+        IDirect3DSurface9* rtSurface;
+        g_D3DDev->GetRenderTarget(0, &rtSurface);
 
         IDirect3DSurface9* genSfc;
         genTex->GetSurfaceLevel(0, &genSfc);
 
-        g_D3DDev->StretchRect(genSfc, 0, rt, 0, D3DTEXF_NONE);
+        g_D3DDev->StretchRect(genSfc, 0, rtSurface, 0, D3DTEXF_NONE);
 
         genSfc->Release();
-        rt->Release();
+        rtSurface->Release();
     }
 }
-auto ppListener = g_PostEnginePostProcessingCallback->addListener(onEnginePostProcessing);
+auto ppListener = g_EnginePostProcessingCallback->addListener(onEnginePostProcessing);
+
+void drawHUD() {}
+auto drawHudListener = g_ImGuiCallback->addListener(drawHUD);
 
 void drawOriginalSfc()
 {
     if (!genConfig.drawSource)
         return;
-
+    
     ImGui::Begin("##Source", 0, ImGuiWindowFlags_NoTitleBar);
     auto wndSize = ImGui::GetContentRegionAvail();
-    ImGui::Image(targetRTD3D, wndSize, {0, 0}, {1, 1});
+    ImGui::Image(viewRT, wndSize, {0, 0}, {1, 1});
     ImGui::End();
 }
 auto drawOriginalListener = g_ImGuiCallback->addListener(drawOriginalSfc);
 
 void resetEverything(IDirect3DDevice9* dev, _D3DPRESENT_PARAMETERS_*)
 {
-    generatedTexture = nullptr;
-    targetRT = nullptr;
-    targetRTD3D = nullptr;
-    rtCopy = nullptr;
+    viewRT = 0;
+    generatedTexture = 0;
 }
 
 auto resetListener = g_D3DResetCallback->addListener(resetEverything);
