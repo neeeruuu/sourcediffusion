@@ -5,6 +5,7 @@ add_subdirectory(safetyhook)
 # set(SD_FLASH_ATTN TRUE)
 set(SD_FAST_SOFTMAX TRUE)
 set(SD_CUBLAS TRUE)
+set(GGML_STATIC TRUE)
 add_subdirectory(stable-diffusion.cpp)
 
 # ---------------------------
