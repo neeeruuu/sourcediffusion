@@ -72,6 +72,8 @@ void drawMenu()
         if (ImGui::Button("load config"))
             generator::loadConfig();
 
+        ImGui::Checkbox("Automatically save", &cfg->autoSaveConfig);
+
         ImGui::End();
     }
 
