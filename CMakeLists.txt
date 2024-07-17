@@ -50,7 +50,8 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 set_target_properties(
   source-diffusion-loader
   PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
-             $<TARGET_FILE_DIR:source-diffusion-loader> OUTPUT_NAME "Source diffusion")
+             $<TARGET_FILE_DIR:source-diffusion-loader> OUTPUT_NAME
+                                                        "Source diffusion")
 target_include_directories(source-diffusion-loader PRIVATE "src/loader/"
                                                            "src/shared")
 
