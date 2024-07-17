@@ -16,13 +16,16 @@
 ## Requirements
 * A really good Nvidia GPU (for now)
 * A Source game (Garry's Mod only for now)
-* SD models
+* A Stable Diffusion model 
 * [this VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/blob/main/sdxl_vae.safetensors) if using SDXL models
 
-## Installation 
-1. Grab the latest release from this repo (Source Diffusion.zip) and the CUDA Runtime (cuda-runtime-win64.zip)
-2. Extract both zip files on the same directory.
-3. Run Source Diffusion.exe
+## Usage
+1. Run Source Diffusion.exe and wait for the game to load
+2. Press insert to open the menu
+2. Select a model and vae (taesd, cnet and lora if neccessary too)
+3. Click Load model and wait til state becomes Idle
+4. Close the menu and load a level.
+5. Open the menu and check Enabled in general
 
 ## Known issues
 * taesd makes results blurry and incoherent
@@ -35,13 +38,14 @@
 
 ## To-Do:
 * [x] Fix CUDA not being used on GitHub's build
-* [ ] Verify resolution, don't generate while typing in res
+* [x] Don't generate while typing in res
 * [ ] Add way to interrupt load / generation 
 * [X] Fix HUD size being affected when changing CViewSetup size
 * [ ] Implement other backends (CPU, ROCm, etc) 
 * [ ] Improve VAE performance
 * [ ] Implement function signatures for other source games
 * [ ] Improve CUDA install time for build action (25m+ per build atm :<)
+* [ ] Implement SD on NCNN / ONNX
  
 ## Contributing
 If you'd like to contribute, please follow these guidelines:
