@@ -117,17 +117,6 @@ void generate()
         return;
     }
 
-    if (!rtCopy)
-    {
-        res = g_D3DDev->CreateRenderTarget(rtDesc.Width, rtDesc.Height, rtDesc.Format, D3DMULTISAMPLE_NONE, 0, true,
-                                           &rtCopy, 0);
-        if (FAILED(res))
-        {
-            Log::error("faild to create rt copy ({:#010x})", static_cast<unsigned int>(res));
-            return;
-        }
-    }
-
     if (state != GENSTATE_IDLE || img)
         return;
 
@@ -149,6 +138,17 @@ void generate()
         height = genConfig.height;
     }
 
+    if (!rtCopy)
+    {
+        res = g_D3DDev->CreateRenderTarget(width, height, rtDesc.Format, D3DMULTISAMPLE_NONE, 0, true,
+                                           &rtCopy, 0);
+        if (FAILED(res))
+        {
+            Log::error("faild to create rt copy ({:#010x})", static_cast<unsigned int>(res));
+            return;
+        }
+    }
+
     uint8_t* buff = reinterpret_cast<uint8_t*>(malloc(width * height * 3));
     if (!buff)
         return;
@@ -163,7 +163,7 @@ void generate()
         return;
     }
 
-    res = rtCopy->LockRect(&lockedRect, &rect, D3DLOCK_READONLY);
+    res = rtCopy->LockRect(&lockedRect, 0, D3DLOCK_READONLY);
     if (FAILED(res))
     {
         Log::error("failed to lock rtCopy ({:#010x})", static_cast<unsigned int>(res));
@@ -463,9 +463,8 @@ void onEnginePostProcessing()
     if (isRenderingCopyView)
         return;
 
-     if (!genConfig.enabled)
-         return;
-
+    if (!genConfig.enabled)
+        return;
 
     auto genTex = getGeneratedTexture();
     if (genTex)
