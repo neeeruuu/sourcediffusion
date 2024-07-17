@@ -16,3 +16,6 @@
 [submodule "vendor/stable-diffusion.cpp"]
 	path = vendor/stable-diffusion.cpp
 	url = https://github.com/leejet/stable-diffusion.cpp
+[submodule "vendor/imgui-notify"]
+	path = vendor/imgui-notify
+	url = https://github.com/patrickcjk/imgui-notify

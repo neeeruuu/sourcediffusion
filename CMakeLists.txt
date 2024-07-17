@@ -32,8 +32,14 @@ add_library(source-diffusion SHARED ${DLL_SOURCES} ${SHARED_SOURCES}
 target_compile_definitions(source-diffusion PRIVATE ADDS _AMD64_
                                                     WIN32_LEAN_AND_MEAN)
 target_link_libraries(
-  source-diffusion PRIVATE stable-diffusion Zydis safetyhook nlohmann_json
-                           imgui imgui-filebrowser)
+  source-diffusion
+  PRIVATE stable-diffusion
+          Zydis
+          safetyhook
+          nlohmann_json
+          imgui
+          imgui-filebrowser
+          imgui-notify)
 target_include_directories(source-diffusion PRIVATE "src/dll/" "src/shared")
 
 # ---------------------

@@ -23,3 +23,12 @@ target_include_directories(imgui SYSTEM PUBLIC imgui)
 # ---------------------------
 add_library(imgui-filebrowser INTERFACE)
 target_include_directories(imgui-filebrowser SYSTEM INTERFACE "imgui-filebrowser")
+
+# ---------------------------
+# imgui notify
+# ---------------------------
+add_library(
+    imgui-notify INTERFACE imgui-notify/example/src/imgui_notify.h
+    imgui-notify/example/src/fa_solid_900.h)
+target_include_directories(imgui-notify
+                           INTERFACE imgui-notify/example/src)
