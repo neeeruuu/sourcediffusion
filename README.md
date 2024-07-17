@@ -9,12 +9,15 @@
 </p>
 
 > [!WARNING]  
-> Using the wrong settings, incorrect models / VAEs / Loras can result in slow / bad images, and even crashes.
-> SDXL's default VAE has a NaN issue when running fp16 (which is what ggml_conv_2d uses), so use [this VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/blob/main/sdxl_vae.safetensors) for SDXL models
+> * SourceDiffusion is in its really early stage of development, expect changes, crashes and other issues.
+> \
+> * Using the wrong settings, incorrect models / VAEs / Loras can result in slow generation, poor quality images, and even crashes.
+>\
+> * SDXL's default VAE has a NaN issue on fp16 (which is what ggml_conv_2d uses), so please use [this VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/blob/main/sdxl_vae.safetensors) for SDXL models
 
 ## Requirements
 * An NVIDIA GPU (for now)
-* A build of x64 Garry's Mod (for now)
+* A Source game (Garry's Mod only for now)
 
 ## Installation 
 1. Grab the latest release from this repo.
