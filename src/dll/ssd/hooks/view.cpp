@@ -19,10 +19,12 @@ void hDoEnginePostProcessing(int x, int y, int w, int h, bool flashlightOn, bool
 
 SafetyHookInline rvHook{};
 class CViewRender;
-void hCViewRender__RenderView(CViewRender* thisptr, CViewSetup& viewRender, int clearFlags, int whatToDraw)
+void hCViewRender__RenderView(CViewRender* thisptr, CViewSetup& setup, int clearFlags, int whatToDraw)
 {
     g_PreRenderViewCallback->run(viewRender);
     rvHook.call(thisptr, viewRender, clearFlags, whatToDraw);
+    g_PreRenderViewCallback->run(thisptr, setup, callOriginal);
+    rvHook.call(thisptr, setup, clearFlags, whatToDraw);
 }
 
 bool applyViewHooks()
