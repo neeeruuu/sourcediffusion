@@ -273,6 +273,7 @@ void to_json(nlohmann::json& js, const GeneratorConfig& config)
 {
     js["generator"] = {};
     js["generator"]["enabled"] = config.enabled;
+    js["generator"]["draw_overlay"] = config.drawOverlay;
     js["generator"]["draw_source"] = config.drawSource;
 
     js["generator"]["model"] = config.mdlPath;
@@ -302,7 +303,8 @@ void to_json(nlohmann::json& js, const GeneratorConfig& config)
 void from_json(const nlohmann::json& js, GeneratorConfig& config)
 {
     JSONGET(js["generator"], "enabled", config.enabled);
-    JSONGET(js["generator"], "enabled", config.enabled);
+    JSONGET(js["generator"], "draw_overlay", config.drawOverlay);
+    JSONGET(js["generator"], "draw_source", config.drawSource);
 
     JSONGET_CHAR(js["generator"], "model", config.mdlPath);
     JSONGET_CHAR(js["generator"], "vae", config.vaePath);

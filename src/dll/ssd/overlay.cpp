@@ -13,6 +13,11 @@
 
 void drawOverlay()
 {
+    auto cfg = generator::getConfig();
+
+    if (!cfg->drawOverlay)
+        return;
+
     ImVec2 cursor(40, 20);
     auto drawList = ImGui::GetBackgroundDrawList();
 
@@ -26,8 +31,6 @@ void drawOverlay()
 
         cursor.y += ImGui::CalcTextSize(txt.c_str()).y;
     };
-
-    auto cfg = generator::getConfig();
 
     addText(std::format("SourceDiffusion - {}", SOURCEDIFFUSION_VER));
     addText("");

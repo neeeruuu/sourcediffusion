@@ -39,14 +39,15 @@ void drawMenu()
     if (!menuEnabled)
         return;
 
-    GeneratorConfig* cfg = generator::getConfig();
-    GeneratorState state = generator::getState();
-
     g_CaptureInput = true;
 
     if (ImGui::Begin("General", 0, ImGuiWindowFlags_AlwaysAutoResize))
     {
         ImGui::Checkbox("Enabled", &cfg->enabled);
+        ImGui::Checkbox("Draw overlay", &cfg->drawOverlay);
+        ImGui::Checkbox("Draw original", &cfg->drawSource);
+
+        ImGui::Separator();
 
         ImGui::Checkbox("Force resolution", &cfg->overrideResolution);
 
@@ -60,7 +61,6 @@ void drawMenu()
         if (ImGui::InputInt("height", &height, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue))
             cfg->height = height;
 
-        ImGui::Checkbox("Draw original", &cfg->drawSource);
 
         ImGui::KeyBind("menu key", &menuBind->key, &changingMenuBind);
 
