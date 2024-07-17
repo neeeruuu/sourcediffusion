@@ -1,7 +1,7 @@
 #include "loader.h"
+#include "gen.h"
 #include "globals.h"
 #include "hooks.h"
-#include "gen.h"
 
 #include "util/log.h"
 
@@ -65,7 +65,6 @@ void threadedStart()
     Log::initOutput("sourcediff", std::format("{}\\logs", g_DllPath).c_str());
     Log::createConsole();
     Log::setupConsole();
-
 
     Log::info("SourceSD loading...");
 

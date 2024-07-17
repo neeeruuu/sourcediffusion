@@ -6,8 +6,8 @@
 
 #include <d3d9.h>
 
-#include <comdef.h>
 #include <WbemCli.h>
+#include <comdef.h>
 
 #include <stable-diffusion.h>
 

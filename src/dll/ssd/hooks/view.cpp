@@ -31,7 +31,7 @@ bool applyViewHooks()
 
 bool removeViewHooks()
 {
-    //rvHook.reset();
+    // rvHook.reset();
     ppHook.reset();
     return true;
 }

@@ -11,12 +11,13 @@
 
 namespace ImGui
 {
-    namespace {
+    namespace
+    {
         typedef int (*tGetKeyNameTextA)(long lParam, char* lpString, int cchSize);
-inline tGetKeyNameTextA GetKeyNameTextA;
+        inline tGetKeyNameTextA GetKeyNameTextA;
 
-typedef unsigned int (*tMapVirtualKeyA)(unsigned int uCode, unsigned int uMapType);
-inline tMapVirtualKeyA MapVirtualKeyA;
+        typedef unsigned int (*tMapVirtualKeyA)(unsigned int uCode, unsigned int uMapType);
+        inline tMapVirtualKeyA MapVirtualKeyA;
     }
     inline void initKeybind()
     {
@@ -78,9 +79,8 @@ inline tMapVirtualKeyA MapVirtualKeyA;
 
         const ImVec2 keySize = ImGui::CalcTextSize(keyStr);
 
-        const ImRect btnRect(
-            ImVec2(totalBounds.Max.x - keySize.x - (style->ItemInnerSpacing.x * 2), totalBounds.Min.y),
-            ImVec2(totalBounds.Max.x, totalBounds.Max.y));
+        const ImRect btnRect(ImVec2(totalBounds.Max.x - keySize.x - (style->ItemInnerSpacing.x * 2), totalBounds.Min.y),
+                             ImVec2(totalBounds.Max.x, totalBounds.Max.y));
 
         wnd->DrawList->AddRectFilled(btnRect.Min - ImVec2(style->ItemInnerSpacing.x, keySize.y * -.1f),
                                      btnRect.Max + ImVec2(style->ItemInnerSpacing.x, keySize.y * -.1f),
@@ -101,7 +101,7 @@ inline tMapVirtualKeyA MapVirtualKeyA;
 
         if (isFocused)
             *isFocused = false;
-        
+
         if (ImGui::GetActiveID() == id)
         {
             if (isFocused)
