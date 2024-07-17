@@ -16,6 +16,20 @@ bool changingMenuBind = false;
 
 void drawMenu(IDirect3DDevice9* dev)
 {
+    GeneratorConfig* cfg = generator::getConfig();
+    GeneratorState state = generator::getState();
+
+    if (cfg->autoSaveConfig)
+    {
+        static auto lastSave = std::chrono::steady_clock::now();
+        auto now = std::chrono::steady_clock::now();
+        if (now - lastSave > std::chrono::seconds(10))
+        {
+            generator::saveConfig();
+            lastSave = now;
+        }
+    }
+
     if (changingMenuBind)
         menuBind->isActive = false;
     else

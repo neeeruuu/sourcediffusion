@@ -30,6 +30,10 @@ struct GeneratorConfig
         bool overrideResolution = true;
         int width = 512;
         int height = 512;
+
+        bool drawOverlay = true;
+
+        bool autoSaveConfig = true;
 };
 
 enum GeneratorState
