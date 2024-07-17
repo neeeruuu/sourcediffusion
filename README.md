@@ -14,14 +14,15 @@
 > * SDXL's default VAE has a NaN issue on fp16 (which is what ggml_conv_2d uses), so please use [this VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/blob/main/sdxl_vae.safetensors) for SDXL models
 
 ## Requirements
-* An NVIDIA GPU (for now)
-* [CUDA](https://developer.nvidia.com/cuda-downloads)
+* A really good Nvidia GPU (for now)
 * A Source game (Garry's Mod only for now)
+* SD models
+* [this VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/blob/main/sdxl_vae.safetensors) if using SDXL models
 
-<!-- ## Installation 
-1. Grab the latest release from this repo.
-2. Extract it.
-3. Run Source Diffusion.exe -->
+## Installation 
+1. Grab the latest release from this repo (Source Diffusion.zip) and the CUDA Runtime (cuda-runtime-win64.zip)
+2. Extract both zip files on the same directory.
+3. Run Source Diffusion.exe
 
 ## Known issues
 * taesd makes results blurry and incoherent
@@ -33,7 +34,7 @@
 * [Realities Edge XL](https://civitai.com/models/129666?modelVersionId=356472)
 
 ## To-Do:
-* [ ] Fix CUDA not being used on GitHub's build
+* [x] Fix CUDA not being used on GitHub's build
 * [ ] Verify resolution, don't generate while typing in res
 * [ ] Add way to interrupt load / generation 
 * [ ] Fix HUD size being affected when changing CViewSetup size
