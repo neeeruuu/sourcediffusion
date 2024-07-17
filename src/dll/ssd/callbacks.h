@@ -14,5 +14,4 @@ inline auto g_D3DResetCallback = new CallbackEvent<IDirect3DDevice9*, _D3DPRESEN
 
 inline auto g_ImGuiCallback = new CallbackEvent();
 
-inline auto g_PostEnginePostProcessingCallback = new CallbackEvent();
-inline auto g_PreRenderViewCallback = new CallbackEvent<CViewRender*, CViewSetup&, std::function<void(CViewSetup&, int, int)>>();
+inline auto g_EnginePostProcessingCallback = new CallbackEvent();
