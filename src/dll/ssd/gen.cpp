@@ -96,7 +96,7 @@ void generate(IDirect3DSurface9* rt)
     res = rt->GetDesc(&rtDesc);
     if (FAILED(res))
     {
-        Log::error("failed to get rt desc ({:#010x})", res);
+        Log::error("failed to get rt desc ({:#010x})", static_cast<unsigned int>(res));
         return;
     }
 
@@ -106,7 +106,7 @@ void generate(IDirect3DSurface9* rt)
                                            &rtCopy, 0);
         if (FAILED(res))
         {
-            Log::error("faild to create rt copy ({:#010x})", res);
+            Log::error("faild to create rt copy ({:#010x})", static_cast<unsigned int>(res));
             return;
         }
     }
@@ -114,7 +114,7 @@ void generate(IDirect3DSurface9* rt)
     res = g_D3DDev->StretchRect(rt, nullptr, rtCopy, nullptr, D3DTEXF_NONE);
     if (FAILED(res))
     {
-        Log::error("failed to copy rt ({:#010x})", res);
+        Log::error("failed to copy rt ({:#010x})", static_cast<unsigned int>(res));
         return;
     }
 
@@ -148,7 +148,7 @@ void generate(IDirect3DSurface9* rt)
     res = rtCopy->LockRect(&lockedRect, &srcRect, D3DLOCK_READONLY);
     if (FAILED(res))
     {
-        Log::error("failed to lock rtCopy ({:#010x})", res);
+        Log::error("failed to lock rtCopy ({:#010x})", static_cast<unsigned int>(res));
         return;
     }
 
@@ -448,16 +448,16 @@ void drawOriginalSfc()
             res = g_D3DDev->CreateTexture(copyDesc.Width, copyDesc.Height, 1, D3DUSAGE_RENDERTARGET, copyDesc.Format,
                                      D3DPOOL_DEFAULT, &copyTex, 0);
             if (FAILED(res))
-                return Log::error("failed to create texture of rt copy ({:#010x})", res);
+                return Log::error("failed to create texture of rt copy ({:#010x})", static_cast<unsigned int>(res));
         }
 
         IDirect3DSurface9* copyTexSfc = nullptr;
         res = copyTex->GetSurfaceLevel(0, &copyTexSfc);
         if (FAILED(res))
-            return Log::error("failed to get surface of copy texture ({:#010x})", res);
+            return Log::error("failed to get surface of copy texture ({:#010x})", static_cast<unsigned int>(res));
         res = g_D3DDev->StretchRect(rtCopy, 0, copyTexSfc, 0, D3DTEXF_NONE);
         if (FAILED(res))
-            return Log::error("failed to stretch rt copy ({:#010x})", res);
+            return Log::error("failed to stretch rt copy ({:#010x})", static_cast<unsigned int>(res));
         copyTexSfc->Release();
 
         if (genConfig.overrideResolution)

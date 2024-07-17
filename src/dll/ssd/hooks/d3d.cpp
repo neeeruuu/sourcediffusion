@@ -84,7 +84,7 @@ bool applyD3DHooks()
         return true;
     }
 
-    Log::error("failed to create d3d device ({:#010x})", res);
+    Log::error("failed to create d3d device ({:#010x})", static_cast<unsigned int>(res));
 
     return false;
 }
