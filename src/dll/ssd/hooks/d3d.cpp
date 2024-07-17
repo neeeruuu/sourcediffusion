@@ -10,31 +10,8 @@
 
 #include <d3d9.h>
 
-#include <backends/imgui_impl_dx9.h>
-#include <backends/imgui_impl_win32.h>
-#include <imgui.h>
-
 SafetyHookInline d3dPresentHook{};
 SafetyHookInline d3dResetHook{};
-
-bool imguiInitialized = false;
-void initImGui(IDirect3DDevice9* dev)
-{
-    if (imguiInitialized)
-        return;
-    imguiInitialized = true;
-
-    if (ImGui::GetCurrentContext())
-    {
-        ImGui::DestroyContext();
-        ImGui_ImplWin32_Shutdown();
-        ImGui_ImplDX9_Shutdown();
-    }
-
-    ImGui::CreateContext();
-    ImGui_ImplWin32_Init(g_hWnd);
-    ImGui_ImplDX9_Init(dev);
-}
 
 HRESULT hIDirect3DDevice9__Present(IDirect3DDevice9* dvc, const RECT* srcRect, const RECT* destRect,
                                    HWND destWndOverride, const RGNDATA* dirtyRegion)
@@ -42,57 +19,7 @@ HRESULT hIDirect3DDevice9__Present(IDirect3DDevice9* dvc, const RECT* srcRect, c
     if (g_hWnd)
     {
         g_D3DDev = dvc;
-        initImGui(dvc);
-
-        g_CaptureInput = false;
-
-        DWORD dwWrite;
-        DWORD dwColorWrite;
-
-        DWORD dwAddressU;
-        DWORD dwAddressV;
-        DWORD dwAddressW;
-        DWORD dwTex;
-
-        dvc->GetRenderState(D3DRS_SRGBWRITEENABLE, &dwWrite);
-        dvc->GetRenderState(D3DRS_COLORWRITEENABLE, &dwColorWrite);
-
-        dvc->SetRenderState(D3DRS_SRGBWRITEENABLE, false);
-        dvc->SetRenderState(D3DRS_COLORWRITEENABLE, 0xFFFFFFFF);
-
-        dvc->GetSamplerState(NULL, D3DSAMP_ADDRESSU, &dwAddressU);
-        dvc->GetSamplerState(NULL, D3DSAMP_ADDRESSV, &dwAddressV);
-        dvc->GetSamplerState(NULL, D3DSAMP_ADDRESSW, &dwAddressW);
-        dvc->GetSamplerState(NULL, D3DSAMP_SRGBTEXTURE, &dwTex);
-
-        dvc->SetSamplerState(NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-        dvc->SetSamplerState(NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-        dvc->SetSamplerState(NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP);
-        dvc->SetSamplerState(NULL, D3DSAMP_SRGBTEXTURE, NULL);
-
-        ImGui_ImplDX9_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
-
         g_D3DPresentCallback->run(dvc);
-
-        CURSORINFO CursorInfo;
-        CursorInfo.cbSize = sizeof(CursorInfo);
-        if (GetCursorInfo(&CursorInfo))
-            if (CursorInfo.flags == 0)
-                ImGui::GetIO().MouseDrawCursor = g_CaptureInput;
-
-        ImGui::EndFrame();
-        ImGui::Render();
-        ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-
-        dvc->SetRenderState(D3DRS_SRGBWRITEENABLE, dwWrite);
-        dvc->SetRenderState(D3DRS_COLORWRITEENABLE, dwColorWrite);
-
-        dvc->SetSamplerState(NULL, D3DSAMP_ADDRESSU, dwAddressU);
-        dvc->SetSamplerState(NULL, D3DSAMP_ADDRESSV, dwAddressV);
-        dvc->SetSamplerState(NULL, D3DSAMP_ADDRESSW, dwAddressW);
-        dvc->SetSamplerState(NULL, D3DSAMP_SRGBTEXTURE, dwTex);
     }
 
     return d3dPresentHook.call<HRESULT>(dvc, srcRect, destRect, destWndOverride, dirtyRegion);
@@ -100,7 +27,6 @@ HRESULT hIDirect3DDevice9__Present(IDirect3DDevice9* dvc, const RECT* srcRect, c
 
 HRESULT hIDirect3DDevice9__Reset(IDirect3DDevice9* dvc, D3DPRESENT_PARAMETERS* presentationParams)
 {
-    imguiInitialized = false;
     g_D3DResetCallback->run(dvc, presentationParams);
     return d3dResetHook.call<HRESULT>(dvc, presentationParams);
 }
