@@ -5,81 +5,85 @@
 typedef LONG NTSTATUS;
 typedef LONG KPRIORITY;
 
-typedef struct _UNICODE_STRING {
-    USHORT Length;
-    USHORT MaximumLength;
-    PWSTR  Buffer;
+typedef struct _UNICODE_STRING
+{
+        USHORT Length;
+        USHORT MaximumLength;
+        PWSTR Buffer;
 } UNICODE_STRING;
 
-typedef struct _PEB_LDR_DATA {
-    BYTE Reserved1[8];
-    PVOID Reserved2[3];
-    LIST_ENTRY InMemoryOrderModuleList;
-} PEB_LDR_DATA, * PPEB_LDR_DATA;
+typedef struct _PEB_LDR_DATA
+{
+        BYTE Reserved1[8];
+        PVOID Reserved2[3];
+        LIST_ENTRY InMemoryOrderModuleList;
+} PEB_LDR_DATA, *PPEB_LDR_DATA;
 
-typedef struct _RTL_USER_PROCESS_PARAMETERS {
-    BYTE Reserved1[16];
-    PVOID Reserved2[10];
-    UNICODE_STRING ImagePathName;
-    UNICODE_STRING CommandLine;
-} RTL_USER_PROCESS_PARAMETERS, * PRTL_USER_PROCESS_PARAMETERS;
+typedef struct _RTL_USER_PROCESS_PARAMETERS
+{
+        BYTE Reserved1[16];
+        PVOID Reserved2[10];
+        UNICODE_STRING ImagePathName;
+        UNICODE_STRING CommandLine;
+} RTL_USER_PROCESS_PARAMETERS, *PRTL_USER_PROCESS_PARAMETERS;
 
-typedef struct _PEB {
-    BOOLEAN							InheritedAddressSpace;
-    BOOLEAN							ReadImageFileExecOptions;
-    BOOLEAN							BeingDebugged;
-    BOOLEAN							Spare;
-    HANDLE							Mutant;
-    PVOID							ImageBaseAddress;
-    PPEB_LDR_DATA					LoaderData;
-    PRTL_USER_PROCESS_PARAMETERS	ProcessParameters;
-    PVOID							SubSystemData;
-    PVOID							ProcessHeap;
-    PVOID							FastPebLock;
-    PVOID /*PPEBLOCKROUTINE*/		FastPebLockRoutine;
-    PVOID /*PPEBLOCKROUTINE*/		FastPebUnlockRoutine;
-    ULONG							EnvironmentUpdateCount;
-    PVOID /*PPVOID*/				KernelCallbackTable;
-    PVOID							EventLogSection;
-    PVOID							EventLog;
-    PVOID /*PPEB_FREE_BLOCK*/		FreeList;
-    ULONG							TlsExpansionCounter;
-    PVOID							TlsBitmap;
-    ULONG							TlsBitmapBits[0x2];
-    PVOID							ReadOnlySharedMemoryBase;
-    PVOID							ReadOnlySharedMemoryHeap;
-    PVOID /*PPVOID*/				ReadOnlyStaticServerData;
-    PVOID							AnsiCodePageData;
-    PVOID							OemCodePageData;
-    PVOID							UnicodeCaseTableData;
-    ULONG							NumberOfProcessors;
-    ULONG							NtGlobalFlag;
-    BYTE							Spare2[0x4];
-    LARGE_INTEGER					CriticalSectionTimeout;
-    ULONG							HeapSegmentReserve;
-    ULONG							HeapSegmentCommit;
-    ULONG							HeapDeCommitTotalFreeThreshold;
-    ULONG							HeapDeCommitFreeBlockThreshold;
-    ULONG							NumberOfHeaps;
-    ULONG							MaximumNumberOfHeaps;
-    PVOID* /*PPVOID**/				ProcessHeaps;
-    PVOID							GdiSharedHandleTable;
-    PVOID							ProcessStarterHelper;
-    PVOID							GdiDCAttributeList;
-    PVOID							LoaderLock;
-    ULONG							OSMajorVersion;
-    ULONG							OSMinorVersion;
-    ULONG							OSBuildNumber;
-    ULONG							OSPlatformId;
-    ULONG							ImageSubSystem;
-    ULONG							ImageSubSystemMajorVersion;
-    ULONG							ImageSubSystemMinorVersion;
-    ULONG							GdiHandleBuffer[0x22];
-    ULONG							PostProcessInitRoutine;
-    ULONG							TlsExpansionBitmap;
-    BYTE							TlsExpansionBitmapBits[0x80];
-    ULONG							SessionId;
-} PEB, * PPEB;
+typedef struct _PEB
+{
+        BOOLEAN InheritedAddressSpace;
+        BOOLEAN ReadImageFileExecOptions;
+        BOOLEAN BeingDebugged;
+        BOOLEAN Spare;
+        HANDLE Mutant;
+        PVOID ImageBaseAddress;
+        PPEB_LDR_DATA LoaderData;
+        PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
+        PVOID SubSystemData;
+        PVOID ProcessHeap;
+        PVOID FastPebLock;
+        PVOID /*PPEBLOCKROUTINE*/ FastPebLockRoutine;
+        PVOID /*PPEBLOCKROUTINE*/ FastPebUnlockRoutine;
+        ULONG EnvironmentUpdateCount;
+        PVOID /*PPVOID*/ KernelCallbackTable;
+        PVOID EventLogSection;
+        PVOID EventLog;
+        PVOID /*PPEB_FREE_BLOCK*/ FreeList;
+        ULONG TlsExpansionCounter;
+        PVOID TlsBitmap;
+        ULONG TlsBitmapBits[0x2];
+        PVOID ReadOnlySharedMemoryBase;
+        PVOID ReadOnlySharedMemoryHeap;
+        PVOID /*PPVOID*/ ReadOnlyStaticServerData;
+        PVOID AnsiCodePageData;
+        PVOID OemCodePageData;
+        PVOID UnicodeCaseTableData;
+        ULONG NumberOfProcessors;
+        ULONG NtGlobalFlag;
+        BYTE Spare2[0x4];
+        LARGE_INTEGER CriticalSectionTimeout;
+        ULONG HeapSegmentReserve;
+        ULONG HeapSegmentCommit;
+        ULONG HeapDeCommitTotalFreeThreshold;
+        ULONG HeapDeCommitFreeBlockThreshold;
+        ULONG NumberOfHeaps;
+        ULONG MaximumNumberOfHeaps;
+        PVOID* /*PPVOID**/ ProcessHeaps;
+        PVOID GdiSharedHandleTable;
+        PVOID ProcessStarterHelper;
+        PVOID GdiDCAttributeList;
+        PVOID LoaderLock;
+        ULONG OSMajorVersion;
+        ULONG OSMinorVersion;
+        ULONG OSBuildNumber;
+        ULONG OSPlatformId;
+        ULONG ImageSubSystem;
+        ULONG ImageSubSystemMajorVersion;
+        ULONG ImageSubSystemMinorVersion;
+        ULONG GdiHandleBuffer[0x22];
+        ULONG PostProcessInitRoutine;
+        ULONG TlsExpansionBitmap;
+        BYTE TlsExpansionBitmapBits[0x80];
+        ULONG SessionId;
+} PEB, *PPEB;
 
 enum PROCESSINFOCLASS
 {
@@ -186,11 +190,12 @@ enum PROCESSINFOCLASS
     MaxProcessInfoClass = 0x64
 };
 
-typedef struct _PROCESS_BASIC_INFORMATION {
-    NTSTATUS ExitStatus;
-    PPEB PebBaseAddress;
-    ULONG_PTR AffinityMask;
-    KPRIORITY BasePriority;
-    ULONG_PTR UniqueProcessId;
-    ULONG_PTR InheritedFromUniqueProcessId;
+typedef struct _PROCESS_BASIC_INFORMATION
+{
+        NTSTATUS ExitStatus;
+        PPEB PebBaseAddress;
+        ULONG_PTR AffinityMask;
+        KPRIORITY BasePriority;
+        ULONG_PTR UniqueProcessId;
+        ULONG_PTR InheritedFromUniqueProcessId;
 } PROCESS_BASIC_INFORMATION;
