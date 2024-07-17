@@ -36,10 +36,15 @@ void drawMenu()
     else
         menuBind->isActive = true;
 
-    if (!menuEnabled)
-        return;
+    //if (!menuEnabled)
+    //    return;
 
     g_CaptureInput = true;
+
+    static bool isFirstFrame = true;
+    auto io = ImGui::GetIO();
+    static ImVec2 wndSize;
+    static ImVec2 prevWndSize;
 
     if (ImGui::Begin("General", 0, ImGuiWindowFlags_AlwaysAutoResize))
     {
@@ -54,13 +59,12 @@ void drawMenu()
         static int width = cfg->width;
         if (ImGui::InputInt("width", &width))
             cfg->width = width;
-        
+
         ImGui::SameLine();
 
         static int height = cfg->height;
         if (ImGui::InputInt("height", &height, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue))
             cfg->height = height;
-
 
         ImGui::KeyBind("menu key", &menuBind->key, &changingMenuBind);
 
@@ -74,6 +78,11 @@ void drawMenu()
 
         ImGui::Checkbox("Automatically save", &cfg->autoSaveConfig);
 
+        if (!isFirstFrame)
+        {
+            wndSize = ImGui::GetWindowSize();
+            ImGui::SetWindowPos({io.DisplaySize.x - wndSize.x, io.DisplaySize.y - wndSize.y}, ImGuiCond_Once);
+        }
         ImGui::End();
     }
 
@@ -203,6 +212,14 @@ void drawMenu()
         if (!canLoad)
             ImGui::EndDisabled();
 
+        if (!isFirstFrame)
+        {
+            prevWndSize = wndSize;
+            wndSize = ImGui::GetWindowSize();
+            ImGui::SetWindowPos({io.DisplaySize.x - wndSize.x, io.DisplaySize.y - wndSize.y - prevWndSize.y},
+                                ImGuiCond_Once);
+        }
+
         ImGui::End();
 
         mdlDialog.Display();
@@ -261,8 +278,16 @@ void drawMenu()
                      "lcm\0"
                      "\0");
 
+        if (!isFirstFrame)
+        {
+            wndSize = ImGui::GetWindowSize();
+            ImGui::SetWindowPos({0, io.DisplaySize.y - wndSize.y}, ImGuiCond_Once);
+        }
+
         ImGui::End();
     }
+
+    isFirstFrame = false;
 }
 
 auto menuListener = g_ImGuiCallback->addListener(drawMenu);

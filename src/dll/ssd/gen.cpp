@@ -21,6 +21,7 @@
 #include <random>
 #include <thread>
 
+#include "imguiextra.h"
 #include <imgui.h>
 
 #include <imgui_notify.h>
@@ -475,9 +476,16 @@ void drawOriginalSfc()
     if (!genConfig.drawSource)
         return;
 
+    auto io = ImGui::GetIO();
+
+    auto wndSize = io.DisplaySize * .2f;
+    wndSize.x = wndSize.y;
+    ImGui::SetNextWindowSize(wndSize, ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - wndSize.x, 0), ImGuiCond_Once);
+
     ImGui::Begin("##Source", 0, ImGuiWindowFlags_NoTitleBar);
-    auto wndSize = ImGui::GetContentRegionAvail();
-    ImGui::Image(viewRT, wndSize, {0, 0}, {1, 1});
+    auto rtSize = ImGui::GetContentRegionAvail();
+    ImGui::Image(viewRT, rtSize, {0, 0}, {1, 1});
     ImGui::End();
 }
 auto drawOriginalListener = g_ImGuiCallback->addListener(drawOriginalSfc);
