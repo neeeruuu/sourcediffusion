@@ -10,6 +10,7 @@
 
 > [!WARNING]  
 > Using the wrong settings, incorrect models / VAEs / Loras can result in slow / bad images, and even crashes.
+> SDXL's default VAE has a NaN issue when running fp16 (which is what ggml_conv_2d uses), so use [this VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/blob/main/sdxl_vae.safetensors) for SDXL models
 
 ## Requirements
 * An NVIDIA GPU (for now)
@@ -20,7 +21,17 @@
 2. Extract it.
 3. Run Source Diffusion.exe
 
+## Known issues
+* taesd makes results blurry and incoherent
+* invalid resolutions cause crashes
+
+## Tested (and confirmed working) models
+* [DMD2](https://huggingface.co/tianweiy/DMD2/tree/main)
+* [DreamShaper XL Turbo](https://huggingface.co/Lykon/dreamshaper-xl-turbo/tree/main)
+* [Realities Edge XL](https://civitai.com/models/129666?modelVersionId=356472)
+
 ## To-Do:
+* [ ] Verify resolution, don't generate while typing in res
 * [ ] Add way to interrupt load / generation 
 * [ ] Fix HUD size being affected when changing CViewSetup size
 * [ ] Implement other backends (CPU, ROCm, etc) 
