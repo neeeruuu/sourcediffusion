@@ -1,53 +1,66 @@
-# name: Build
+name: Build
 
-# on:
-#   push:
-#     branches: 
-#       - "main"
-#     paths-ignore:
-#       - "README.md"
+on:
+  push:
+    branches: 
+      - "main"
+    paths-ignore:
+      - "README.md"
 
-# jobs:
-#   build:
-#     runs-on: windows-latest
-#     permissions: write-all
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           submodules: "recursive"
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
 
-#       - uses: Jimver/cuda-toolkit@v0.2.16
-#         id: cuda-toolkit
-#         with:
-#           cuda: "12.5.0"
+      # https://github.com/leejet/stable-diffusion.cpp/blob/master/.github/workflows/build.yml
+      - name: Install cuda
+        id: cuda-toolkit
+        uses: Jimver/cuda-toolkit@v0.2.11
+        with:
+          cuda: "12.5.0"
+          method: "network"
+          sub-packages: '["nvcc", "cudart", "cublas", "cublas_dev", "thrust", "visual_studio_integration"]'
 
-#       - name: Bump version, push tag
-#         id: tags
-#         uses: mathieudutour/github-tag-action@v6.1
-#         with:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Copy and pack Cuda runtime
+        id: pack_cuda_runtime
+        run: |
+          echo "Cuda install location: ${{steps.cuda-toolkit.outputs.CUDA_PATH}}"
+          $dst='.\build\bin\cudart\'
+          robocopy "${{steps.cuda-toolkit.outputs.CUDA_PATH}}\bin" $dst cudart64_*.dll cublas64_*.dll cublasLt64_*.dll
+          7z a cuda-runtime-win64.zip $dst\*
 
-#       - name: Create project folder
-#         run: cmake -E make_directory proj
+      - name: Bump version, push tag
+        id: tags
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-#       - name: Generate
-#         working-directory: ${{github.workspace}}\proj
-#         run: cmake ../ -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_VERSION="v${{ steps.tags.outputs.new_version }}"
+      - name: Create project folder
+        run: cmake -E make_directory proj
 
-#       - name: Build
-#         working-directory: ${{github.workspace}}\proj
-#         run: cmake --build . --config MinSizeRel
+      - name: Generate
+        working-directory: ${{github.workspace}}\proj
+        run: cmake ../ -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_VERSION="v${{ steps.tags.outputs.new_version }}"
 
-#       - name: Compress
-#         working-directory: ${{github.workspace}}\proj\MinSizeRel
-#         run: 7z a source-diffusion.zip "Source diffusion.exe" source-diffusion.dll
+      - name: Build
+        working-directory: ${{github.workspace}}\proj
+        run: cmake --build . --config MinSizeRel
 
-#       - name: Release
-#         uses: softprops/action-gh-release@v1
-#         with:
-#           body: ${{ steps.tags.outputs.changelog }}
-#           tag_name: v${{ steps.tags.outputs.new_version }}
-#           name: "v${{ steps.tags.outputs.new_version }}"
-#           fail_on_unmatched_files: true
-#           files: |
-#             proj/MinSizeRel/source-diffusion.zip
+      - name: Compress
+        working-directory: ${{github.workspace}}\proj\MinSizeRel
+        run: 7z a source-diffusion.zip "Source diffusion.exe" source-diffusion.dll
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.tags.outputs.changelog }}
+          tag_name: v${{ steps.tags.outputs.new_version }}
+          name: "v${{ steps.tags.outputs.new_version }}"
+          fail_on_unmatched_files: true
+          files: |
+            proj/MinSizeRel/source-diffusion.zip
+            cuda-runtime-win64.zip
