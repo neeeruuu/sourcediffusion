@@ -19,7 +19,7 @@ jobs:
       # https://github.com/leejet/stable-diffusion.cpp/blob/master/.github/workflows/build.yml
       - name: Install cuda
         id: cuda-toolkit
-        uses: Jimver/cuda-toolkit@v0.2.11
+        uses: Jimver/cuda-toolkit@v0.2.16
         with:
           cuda: "12.5.0"
           method: "network"
