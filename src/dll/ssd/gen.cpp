@@ -447,11 +447,11 @@ void onPreRenderView(CViewRender* viewRender, CViewSetup& viewSetup,
     setup.x = 0;
     setup.y = 0;
 
-    setup.width = setup.width;
-    setup.height = setup.height;
-    setup.m_flAspectRatio = static_cast<float>(setup.width) / static_cast<float>(setup.height);
+    //setup.width = genConfig.overrideResolution ? genConfig.width : viewSetup.width;
+    //setup.height = genConfig.overrideResolution ? genConfig.height : viewSetup.height;
+    //setup.m_flAspectRatio = static_cast<float>(setup.width) / static_cast<float>(setup.height);
 
-    setup.fov = 90.f;
+    setup.fov = viewSetup.fov;
 
     renderContext->SetIntRenderingParameter(INT_RENDERPARM_WRITE_DEPTH_TO_DESTALPHA, 0);
     renderContext->PushRenderTargetAndViewport();
