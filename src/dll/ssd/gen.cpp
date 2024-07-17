@@ -111,6 +111,7 @@ void generate()
     if (FAILED(res))
     {
         Log::error("failed to get rt desc ({:#010x})", static_cast<unsigned int>(res));
+        rtSurface->Release();
         return;
     }
 
@@ -142,6 +143,7 @@ void generate()
         if (FAILED(res))
         {
             Log::error("faild to create rt copy ({:#010x})", static_cast<unsigned int>(res));
+            rtSurface->Release();
             return;
         }
     }
@@ -157,8 +159,10 @@ void generate()
     if (FAILED(res))
     {
         Log::error("failed to copy rt ({:#010x})", static_cast<unsigned int>(res));
+        rtSurface->Release();
         return;
     }
+    rtSurface->Release();
 
     res = rtCopy->LockRect(&lockedRect, 0, D3DLOCK_READONLY);
     if (FAILED(res))
