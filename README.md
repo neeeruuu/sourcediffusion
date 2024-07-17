@@ -15,6 +15,7 @@
 
 ## Requirements
 * An NVIDIA GPU (for now)
+* [CUDA](https://developer.nvidia.com/cuda-downloads)
 * A Source game (Garry's Mod only for now)
 
 <!-- ## Installation 
