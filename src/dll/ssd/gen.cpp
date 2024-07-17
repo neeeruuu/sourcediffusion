@@ -73,9 +73,16 @@ bool regenContext()
         ImGuiToast toast(ImGuiToastType_Error, 3000);
         toast.set_title("Failed to load model");
         toast.set_content("new_sd_ctx returned nullptr");
+        ImGui::InsertNotification(toast);
+
         Log::error("new_sd_ctx failed");
         return false;
     }
+
+    ImGuiToast toast(ImGuiToastType_Success, 3000);
+    toast.set_title("Model loaded");
+    toast.set_content("Succesfully loaded model");
+    ImGui::InsertNotification(toast);
 
     return true;
 }
@@ -302,6 +309,8 @@ void to_json(nlohmann::json& js, const GeneratorConfig& config)
     js["generator"]["override_res"] = config.overrideResolution;
     js["generator"]["width"] = config.width;
     js["generator"]["height"] = config.height;
+
+    js["generator"]["auto_save_cfg"] = config.autoSaveConfig;
 }
 
 void from_json(const nlohmann::json& js, GeneratorConfig& config)
@@ -332,6 +341,8 @@ void from_json(const nlohmann::json& js, GeneratorConfig& config)
     JSONGET(js["generator"], "override_res", config.overrideResolution);
     JSONGET(js["generator"], "width", config.width);
     JSONGET(js["generator"], "height", config.height);
+
+    JSONGET(js["generator"], "auto_save_cfg", config.autoSaveConfig);
 }
 
 void generator::loadConfig()
