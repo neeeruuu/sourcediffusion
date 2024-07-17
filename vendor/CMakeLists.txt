@@ -3,9 +3,9 @@ add_subdirectory(zydis)
 add_subdirectory(safetyhook)
 
 # set(SD_FLASH_ATTN TRUE)
-set(SD_FAST_SOFTMAX TRUE)
-set(SD_CUBLAS TRUE)
-set(GGML_STATIC TRUE)
+set(SD_FAST_SOFTMAX TRUE CACHE INTERNAL "")
+set(SD_CUBLAS TRUE CACHE INTERNAL "")
+set(GGML_STATIC TRUE CACHE INTERNAL "")
 add_subdirectory(stable-diffusion.cpp)
 
 # ---------------------------
