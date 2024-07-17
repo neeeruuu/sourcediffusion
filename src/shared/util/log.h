@@ -23,6 +23,8 @@ inline const char* logTypeColors[]{"\x1b[34;40m", "\x1b[32;40m", "\x1b[30;43m", 
         write(TYPE, std::vformat(fmt.get(), std::make_format_args(args...)));                                          \
     }
 
+#define LOG_MAX_ENTRIES 4
+
 namespace Log
 {
 #ifdef _WIN32
@@ -36,6 +38,11 @@ namespace Log
     */
     void setupConsole();
 #endif
+
+    /*
+        sets where log should output
+    */
+    void initOutput(const char* name, const char* location);
 
     /*
         Prints log to console

@@ -49,14 +49,8 @@ void threadedStart()
     LoadLibraryA("libcef.dll");
 
     /*
-        AllocConsole, open conout, enable ansi
-    */
-    Log::createConsole();
-    Log::setupConsole();
-
-    /*
-        get dll path
-    */
+    get dll path
+*/
     char cModuleName[MAX_PATH];
     GetModuleFileNameA(reinterpret_cast<HMODULE>(g_DllMod), cModuleName, MAX_PATH);
 
@@ -64,6 +58,14 @@ void threadedStart()
     std::string sModulePath = sModuleName.substr(0, sModuleName.find_last_of('\\'));
 
     memcpy(g_DllPath, sModulePath.c_str(), sModulePath.length() + 1);
+
+    /*
+        AllocConsole, open conout, enable ansi
+    */
+    Log::initOutput("sourcediff", std::format("{}\\logs", g_DllPath).c_str());
+    Log::createConsole();
+    Log::setupConsole();
+
 
     Log::info("SourceSD loading...");
 
