@@ -175,11 +175,7 @@ int main(int argc, char* argv[])
     if (gamePath == 0)
         return reportError("failed to find game");
 
-    std::string cmdLine = std::string(gamePath) + "\\" + EXE_NAME;
-    cmdLine = cmdLine.append(" +gmod_mcore_test  0");
-#ifdef _DEBUG
-    cmdLine = cmdLine.append("+map gm_flatgrass +gamemode sandbox +maxplayers 32 -console");
-#endif
+    std::string cmdLine = std::string(gamePath) + "\\" + EXE_NAME + " +gmod_mcore_test 0";
 
     std::filesystem::path currentPath = std::filesystem::path(argv[0]).parent_path();
     std::string dllPath = currentPath.string() + "\\" + DLL_NAME;
