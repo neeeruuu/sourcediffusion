@@ -55,7 +55,7 @@ bool applyD3DHooks()
 
     IDirect3DDevice9* dev = nullptr;
 
-    res = d3d->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, GetDesktopWindow(),
+    res = d3d->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_NULLREF, GetDesktopWindow(),
                             D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_NOWINDOWCHANGES, &pp, &dev);
     if (!FAILED(res))
     {
