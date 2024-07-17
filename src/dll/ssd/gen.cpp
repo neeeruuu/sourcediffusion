@@ -136,6 +136,13 @@ void generate()
         height = genConfig.height;
     }
 
+    if (width < 0 || height < 0)
+    {
+        Log::error("invalid resolution ({}x{})", width, height);
+        rtSurface->Release();
+        return;
+    }
+
     IDirect3DSurface9* rtCopy = nullptr;
     if (!rtCopy)
     {
