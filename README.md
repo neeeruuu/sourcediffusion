@@ -37,7 +37,7 @@
 * [x] Fix CUDA not being used on GitHub's build
 * [ ] Verify resolution, don't generate while typing in res
 * [ ] Add way to interrupt load / generation 
-* [ ] Fix HUD size being affected when changing CViewSetup size
+* [X] Fix HUD size being affected when changing CViewSetup size
 * [ ] Implement other backends (CPU, ROCm, etc) 
 * [ ] Improve VAE performance
 * [ ] Implement function signatures for other source games
