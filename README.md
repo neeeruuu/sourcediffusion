@@ -25,7 +25,7 @@
 * taesd makes results blurry and incoherent
 * invalid resolutions cause crashes
 
-## Tested (and confirmed working) models
+## Tested models
 * [DMD2](https://huggingface.co/tianweiy/DMD2/tree/main)
 * [DreamShaper XL Turbo](https://huggingface.co/Lykon/dreamshaper-xl-turbo/tree/main)
 * [Realities Edge XL](https://civitai.com/models/129666?modelVersionId=356472)
