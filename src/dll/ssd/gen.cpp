@@ -442,31 +442,19 @@ void onPreRenderView(CViewRender* viewRender, CViewSetup& viewSetup,
         Log::verbose("created source rendertarget");
     }
 
-    CViewSetup setup = viewSetup;
-
-    setup.x = 0;
-    setup.y = 0;
-
-    //setup.width = genConfig.overrideResolution ? genConfig.width : viewSetup.width;
-    //setup.height = genConfig.overrideResolution ? genConfig.height : viewSetup.height;
-    //setup.m_flAspectRatio = static_cast<float>(setup.width) / static_cast<float>(setup.height);
-
-    setup.fov = viewSetup.fov;
-
     renderContext->SetIntRenderingParameter(INT_RENDERPARM_WRITE_DEPTH_TO_DESTALPHA, 0);
     renderContext->PushRenderTargetAndViewport();
     renderContext->SetRenderTarget(targetRT);
     renderContext->ClearBuffers(true, true, true);
 
     isRenderingCopyView = true;
-    renderView(setup, VIEW_CLEAR_COLOR | VIEW_CLEAR_DEPTH | VIEW_CLEAR_STENCIL, RENDERVIEW_DRAWVIEWMODEL);
+    renderView(viewSetup, VIEW_CLEAR_COLOR | VIEW_CLEAR_DEPTH | VIEW_CLEAR_STENCIL, RENDERVIEW_DRAWVIEWMODEL);
     isRenderingCopyView = false;
 
     renderContext->PopRenderTargetAndViewport();
     renderContext->SetIntRenderingParameter(INT_RENDERPARM_WRITE_DEPTH_TO_DESTALPHA, 1);
 
     generate();
-
 }
 auto rvListener = g_PreRenderViewCallback->addListener(onPreRenderView);
 
