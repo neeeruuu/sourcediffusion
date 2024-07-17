@@ -5,6 +5,8 @@
 
 #include "util/log.h"
 
+#include "source/interfaces.h"
+
 #include <chrono>
 #include <thread>
 
@@ -64,6 +66,9 @@ void threadedStart()
     memcpy(g_DllPath, sModulePath.c_str(), sModulePath.length() + 1);
 
     Log::info("SourceSD loading...");
+
+    Log::info("getting source interfaces");
+    ENSURE(source::getInterfaces(), "failed to get interfaces");
 
     Log::info("applying hooks");
     ENSURE(HookManager::get()->applyAll(), "couldn't apply all hooks");
