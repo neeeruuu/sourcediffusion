@@ -3,16 +3,14 @@
     <b>SourceDiffusion</b>
 </h1>
 <p align="center">
-	"Real-time" Stable Diffusion interference for Source
+	"Real-time" Stable Diffusion generation for Source
     <br/> <br/>
 	<a href="https://discord.gg/uEvGbYZT9x"><b>Join the Discord server</b></a>
 </p>
 
 > [!WARNING]  
 > * SourceDiffusion is in its really early stage of development, expect changes, crashes and other issues.
-> \
 > * Using the wrong settings, incorrect models / VAEs / Loras can result in slow generation, poor quality images, and even crashes.
->\
 > * SDXL's default VAE has a NaN issue on fp16 (which is what ggml_conv_2d uses), so please use [this VAE](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/blob/main/sdxl_vae.safetensors) for SDXL models
 
 ## Requirements
