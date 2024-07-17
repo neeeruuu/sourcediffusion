@@ -11,7 +11,7 @@
 
 #include <stable-diffusion.h>
 
-void drawOverlay(IDirect3DDevice9* dev)
+void drawOverlay()
 {
     ImVec2 cursor(40, 20);
     auto drawList = ImGui::GetBackgroundDrawList();
@@ -43,4 +43,4 @@ void drawOverlay(IDirect3DDevice9* dev)
     addText(sysInfo);
 }
 
-auto overlayListener = g_D3DPresentCallback->addListener(drawOverlay);
+auto overlayListener = g_ImGuiCallback->addListener(drawOverlay);

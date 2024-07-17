@@ -412,7 +412,7 @@ void onEnginePostProcessing()
 }
 auto ppListener = g_PostEnginePostProcessingCallback->addListener(onEnginePostProcessing);
 
-void drawOriginalSfc(IDirect3DDevice9* dev)
+void drawOriginalSfc()
 {
     if (!genConfig.drawSource)
         return;
@@ -428,7 +428,7 @@ void drawOriginalSfc(IDirect3DDevice9* dev)
 
         if (!copyTex)
         {
-            res = dev->CreateTexture(copyDesc.Width, copyDesc.Height, 1, D3DUSAGE_RENDERTARGET, copyDesc.Format,
+            res = g_D3DDev->CreateTexture(copyDesc.Width, copyDesc.Height, 1, D3DUSAGE_RENDERTARGET, copyDesc.Format,
                                      D3DPOOL_DEFAULT, &copyTex, 0);
             if (FAILED(res))
                 return Log::error("failed to create texture of rt copy");
@@ -438,7 +438,7 @@ void drawOriginalSfc(IDirect3DDevice9* dev)
         res = copyTex->GetSurfaceLevel(0, &copyTexSfc);
         if (FAILED(res))
             return Log::error("failed to get surface of copy texture");
-        res = dev->StretchRect(rtCopy, 0, copyTexSfc, 0, D3DTEXF_NONE);
+        res = g_D3DDev->StretchRect(rtCopy, 0, copyTexSfc, 0, D3DTEXF_NONE);
         if (FAILED(res))
             return Log::error("failed to stretch rt copy");
         copyTexSfc->Release();
@@ -457,4 +457,4 @@ void drawOriginalSfc(IDirect3DDevice9* dev)
     ImGui::Image(copyTex, wndSize, {0, 0}, {uvX, uvY});
     ImGui::End();
 }
-auto drawOriginalListener = g_D3DPresentCallback->addListener(drawOriginalSfc);
+auto drawOriginalListener = g_ImGuiCallback->addListener(drawOriginalSfc);

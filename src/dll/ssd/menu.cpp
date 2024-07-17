@@ -12,9 +12,10 @@
 
 bool menuEnabled = false;
 auto menuBind = new Bind(BIND_TOGGLE, VK_INSERT, &menuEnabled, true);
+
 bool changingMenuBind = false;
 
-void drawMenu(IDirect3DDevice9* dev)
+void drawMenu()
 {
     GeneratorConfig* cfg = generator::getConfig();
     GeneratorState state = generator::getState();
@@ -262,4 +263,4 @@ void drawMenu(IDirect3DDevice9* dev)
     }
 }
 
-auto menuListener = g_D3DPresentCallback->addListener(drawMenu);
+auto menuListener = g_ImGuiCallback->addListener(drawMenu);
