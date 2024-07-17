@@ -1,4 +1,3 @@
-#include "util/log.h"
 #include "util/pe.h"
 #include "util/wininternals.h"
 

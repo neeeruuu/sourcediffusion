@@ -474,7 +474,7 @@ void drawOriginalSfc()
 {
     if (!genConfig.drawSource)
         return;
-    
+
     ImGui::Begin("##Source", 0, ImGuiWindowFlags_NoTitleBar);
     auto wndSize = ImGui::GetContentRegionAvail();
     ImGui::Image(viewRT, wndSize, {0, 0}, {1, 1});
