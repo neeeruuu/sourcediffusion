@@ -36,8 +36,8 @@ void drawMenu()
     else
         menuBind->isActive = true;
 
-    //if (!menuEnabled)
-    //    return;
+    if (!menuEnabled)
+        return;
 
     g_CaptureInput = true;
 
@@ -57,13 +57,15 @@ void drawMenu()
         ImGui::Checkbox("Force resolution", &cfg->overrideResolution);
 
         static int width = cfg->width;
-        if (ImGui::InputInt("width", &width))
+        ImGui::InputInt("width", &width);
+        if (ImGui::IsItemDeactivatedAfterEdit())
             cfg->width = width;
 
         ImGui::SameLine();
 
         static int height = cfg->height;
-        if (ImGui::InputInt("height", &height, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+        ImGui::InputInt("height", &height);
+        if (ImGui::IsItemDeactivatedAfterEdit())
             cfg->height = height;
 
         ImGui::KeyBind("menu key", &menuBind->key, &changingMenuBind);
