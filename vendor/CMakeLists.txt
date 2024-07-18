@@ -2,7 +2,9 @@ add_subdirectory(json)
 add_subdirectory(zydis)
 add_subdirectory(safetyhook)
 
-# set(SD_FLASH_ATTN TRUE)
+set(GGML_CUDA_FAST_SOFTMAX TRUE)
+
+set(SD_FLASH_ATTN TRUE)
 set(SD_FAST_SOFTMAX TRUE CACHE INTERNAL "")
 set(SD_CUBLAS TRUE CACHE INTERNAL "")
 set(GGML_STATIC TRUE CACHE INTERNAL "")
